@@ -1,10 +1,9 @@
 '''
-测试用DistributedDataParallel跑多卡训练。
+Pytorch分布式训练脚本，需要安装pytorch。
 
-运行: 在mvb环境下跑如下命令，先确保两块卡有一些空间，大概各1G
-CUDA_VISIBLE_DEVICES=6,7 python test_dist.py -g 2
+@author zz
+@date 2020.3.31
 '''
-
 
 import os
 import subprocess
@@ -18,7 +17,6 @@ import torch.nn as nn
 import torch.distributed as dist
 # from apex.parallel import DistributedDataParallel as DDP
 # from apex import amp
-
 
 
 class ConvNet(nn.Module):    
@@ -49,7 +47,6 @@ class ConvNet(nn.Module):
 def dist_train(gpu, args):
     rank = gpu  # 当前进程号
     print('Rank id: ', rank)
-    # dist.init_process_group(backend='nccl', init_method='env://', world_size=args.world_size, rank=rank)
     dist.init_process_group(backend=args.backend, init_method=args.init_method, world_size=args.world_size, rank=rank)
     torch.manual_seed(0)
     model = ConvNet()
@@ -108,7 +105,7 @@ def main():
     parser.add_argument('--backend', default='nccl', type=str, help='backend used for distributed train')
     parser.add_argument('--syncbn', default=False, action="store_true", help='whether to use syncbn while training')
     args = parser.parse_args()
-    #########################################################    
+       
     args.world_size = args.gpus  # 进程总数
     args.init_method = 'tcp://10.9.1.2:34567'  
     mp.spawn(dist_train, nprocs=args.gpus, args=(args,))         
