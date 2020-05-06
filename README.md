@@ -94,10 +94,10 @@ mp.spawn(dist_train, nprocs=args.gpus, args=(args,))
 
 ```shell
 # 用两块卡训练
-python test_dist.py -g 2
+python ddp_example.py.py -g 2
 
 # 使用SyncBatchNorm
-python test_dist.py -g 2 --syncbn
+python ddp_example.py.py -g 2 --syncbn
 ```
 
 
