@@ -1,3 +1,5 @@
+这是一个轻量级的样例代码，其中用到的数据集`MNIST`会在运行时自动下载。
+
 ### 1. 数据并行的类型
 Pytorch中提供了两种数据并行的方法，一种是`torch.nn.DataParallel`，另一种是`torch.nn.DistributedDataParallel`，简单地说，`DataParallel`适用于单机多卡的情况，而`DistributedDataParallel`适用于多机多卡的情况(当然单机多卡也是可以用的)。
 
